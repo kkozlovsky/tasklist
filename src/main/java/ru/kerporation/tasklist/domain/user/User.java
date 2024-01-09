@@ -1,10 +1,12 @@
 package ru.kerporation.tasklist.domain.user;
 
 import lombok.Data;
+import ru.kerporation.tasklist.domain.task.Task;
+
+import java.util.Set;
 
 @Data
 public class User {
-
     private Long id;
     private String name;
     private String username;
