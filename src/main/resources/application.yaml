@@ -1,0 +1,13 @@
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5432/tasklist?currentSchema=tasklist
+    username: postgres
+    password: postgres
+    driver-class-name: org.postgresql.Driver
+  sql:
+    init:
+      mode: always
+      continue-on-error: false
+      platform: postgres
+      encoding: UTF-8
+#      data-locations: classpath:/sql/schema.sql, classpath:/sql/demo_data.sql
