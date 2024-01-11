@@ -11,3 +11,8 @@ spring:
       platform: postgres
       encoding: UTF-8
 #      data-locations: classpath:/sql/schema.sql, classpath:/sql/demo_data.sql
+security:
+  jwt:
+    secret: YXNkYXNkYXNkYWRhc2RzZ25MS1BMUEwnYXNkYXNkYWpzZmFhc2Fhc2Zhc2ZnYXM=
+    access: 3600000
+    refresh: 2592000000
