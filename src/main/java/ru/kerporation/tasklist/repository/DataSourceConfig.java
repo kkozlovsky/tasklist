@@ -1,0 +1,21 @@
+package ru.kerporation.tasklist.repository;
+
+import lombok.RequiredArgsConstructor;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.jdbc.datasource.DataSourceUtils;
+
+import javax.sql.DataSource;
+import java.sql.Connection;
+
+@Configuration
+@RequiredArgsConstructor
+public class DataSourceConfig {
+
+    private final DataSource dataSource;
+
+    // нужно Spring'у, чтобы обрабывать @Transactional
+    public Connection getConnection() {
+        return DataSourceUtils.getConnection(dataSource);
+    }
+
+}
