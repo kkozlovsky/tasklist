@@ -3,6 +3,7 @@ package ru.kerporation.tasklist.domain.user;
 import lombok.Data;
 import ru.kerporation.tasklist.domain.task.Task;
 
+import java.util.List;
 import java.util.Set;
 
 @Data
@@ -13,5 +14,5 @@ public class User {
     private String password;
     private String passwordConfirmation;
     private Set<Role> roles;
-    private Set<Task> tasks;
+    private List<Task> tasks;
 }

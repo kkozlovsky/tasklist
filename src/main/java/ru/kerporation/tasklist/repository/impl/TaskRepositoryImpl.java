@@ -69,7 +69,7 @@ public class TaskRepositoryImpl implements TaskRepository {
             try (final ResultSet resultSet = preparedStatement.executeQuery()) {
                 return Optional.ofNullable(TaskRowMapper.mapRow(resultSet));
             }
-        } catch (SQLException e) {
+        } catch (final SQLException e) {
             throw new ResourceAccessException("Error while executing query FIND_BY_ID");
         }
     }
@@ -83,7 +83,7 @@ public class TaskRepositoryImpl implements TaskRepository {
             try (final ResultSet resultSet = preparedStatement.executeQuery()) {
                 return TaskRowMapper.mapRows(resultSet);
             }
-        } catch (SQLException e) {
+        } catch (final SQLException e) {
             throw new ResourceAccessException("Error while executing query FIND_ALL_BY_USER_ID");
         }
     }
@@ -94,10 +94,10 @@ public class TaskRepositoryImpl implements TaskRepository {
         try {
             final Connection connection = dataSourceConfig.getConnection();
             final PreparedStatement preparedStatement = connection.prepareStatement(ASSIGN_TO_USER_BY_ID);
-            preparedStatement.setLong(1, taskId);
-            preparedStatement.setLong(2, userId);
+            preparedStatement.setLong(1, userId);
+            preparedStatement.setLong(2, taskId);
             preparedStatement.executeUpdate();
-        } catch (SQLException e) {
+        } catch (final SQLException e) {
             throw new ResourceAccessException("Error while executing query ASSIGN_TO_USER_BY_ID");
         }
     }
@@ -111,12 +111,12 @@ public class TaskRepositoryImpl implements TaskRepository {
             if (nonNull(task.getDescription())) {
                 preparedStatement.setString(2, task.getDescription());
             } else {
-                preparedStatement.setNull(2, java.sql.Types.VARCHAR);
+                preparedStatement.setNull(2, Types.VARCHAR);
             }
             if (nonNull(task.getExpirationDate())) {
                 preparedStatement.setTimestamp(3, Timestamp.valueOf(task.getExpirationDate()));
             } else {
-                preparedStatement.setNull(3, java.sql.Types.VARCHAR);
+                preparedStatement.setNull(3, Types.TIMESTAMP);
             }
             preparedStatement.setString(4, task.getStatus().name());
             preparedStatement.executeUpdate();
@@ -125,7 +125,7 @@ public class TaskRepositoryImpl implements TaskRepository {
                 resultSet.next();
                 task.setId(resultSet.getLong(1));
             }
-        } catch (SQLException e) {
+        } catch (final SQLException e) {
             throw new ResourceAccessException("Error while executing query CREATE");
         }
     }
@@ -139,17 +139,17 @@ public class TaskRepositoryImpl implements TaskRepository {
             if (nonNull(task.getDescription())) {
                 preparedStatement.setString(2, task.getDescription());
             } else {
-                preparedStatement.setNull(2, java.sql.Types.VARCHAR);
+                preparedStatement.setNull(2, Types.VARCHAR);
             }
             if (nonNull(task.getExpirationDate())) {
                 preparedStatement.setTimestamp(3, Timestamp.valueOf(task.getExpirationDate()));
             } else {
-                preparedStatement.setNull(3, java.sql.Types.VARCHAR);
+                preparedStatement.setNull(3, Types.TIMESTAMP);
             }
             preparedStatement.setString(4, task.getStatus().name());
             preparedStatement.setLong(5, task.getId());
             preparedStatement.executeUpdate();
-        } catch (SQLException e) {
+        } catch (final SQLException e) {
             throw new ResourceAccessException("Error while executing query UPDATE");
         }
     }
@@ -161,7 +161,7 @@ public class TaskRepositoryImpl implements TaskRepository {
             final PreparedStatement preparedStatement = connection.prepareStatement(DELETE_BY_ID);
             preparedStatement.setLong(1, id);
             preparedStatement.executeUpdate();
-        } catch (SQLException e) {
+        } catch (final SQLException e) {
             throw new ResourceAccessException("Error while executing query DELETE_BY_ID");
         }
     }
