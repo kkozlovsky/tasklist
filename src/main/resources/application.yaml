@@ -11,6 +11,8 @@ spring:
       platform: postgres
       encoding: UTF-8
 #      data-locations: classpath:/sql/schema.sql, classpath:/sql/demo_data.sql
+mybatis:
+  mapper-locations: classpath:mybatis/mapper/*.xml
 security:
   jwt:
     secret: YXNkYXNkYXNkYWRhc2RzZ25MS1BMUEwnYXNkYXNkYWpzZmFhc2Fhc2Zhc2ZnYXM=

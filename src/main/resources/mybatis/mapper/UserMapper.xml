@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="ru.kerporation.tasklist.repository.UserRepository">
+    <resultMap id="UserResultMap" type="ru.kerporation.tasklist.domain.user.User" autoMapping="false">
+        <id property="id" column="user_id"/>
+        <result property="name" column="user_name"/>
+        <result property="username" column="user_username"/>
+        <result property="password" column="user_password"/>
+        <collection property="roles"
+                    ofType="ru.kerporation.tasklist.domain.user.Role"
+                    autoMapping="false">
+            <result property="name" column="user_role_role"/>
+        </collection>
+        <collection property="tasks"
+                    ofType="ru.kerporation.tasklist.domain.task.Task"
+                    resultMap="ru.kerporation.tasklist.repository.TaskRepository.TaskResultMap"
+                    autoMapping="false">
+        </collection>
+    </resultMap>
+
+    <select id="findById" resultMap="UserResultMap">
+        SELECT users.id as user_id,
+        users.name as user_name,
+        users.username as user_username,
+        users.password as user_password,
+        ur.role as user_role_role,
+        tasks.id as task_id,
+        tasks.title as task_title,
+        tasks.description as task_description,
+        tasks.expiration_date as task_expiration_date,
+        tasks.status as task_status
+        FROM tasklist.users users
+        LEFT JOIN tasklist.users_roles ur on users.id = ur.user_id
+        LEFT JOIN tasklist.users_tasks ut on users.id = ut.user_id
+        LEFT JOIN tasklist.tasks tasks on ut.task_id = tasks.id
+        WHERE users.id = #{id}
+    </select>
+
+    <select id="findByUsername" resultMap="UserResultMap">
+        SELECT users.id as user_id,
+        users.name as user_name,
+        users.username as user_username,
+        users.password as user_password,
+        ur.role as user_role_role,
+        tasks.id as task_id,
+        tasks.title as task_title,
+        tasks.description as task_description,
+        tasks.expiration_date as task_expiration_date,
+        tasks.status as task_status
+        FROM tasklist.users users
+        LEFT JOIN tasklist.users_roles ur on users.id = ur.user_id
+        LEFT JOIN tasklist.users_tasks ut on users.id = ut.user_id
+        LEFT JOIN tasklist.tasks tasks on ut.task_id = tasks.id
+        WHERE users.username = #{username}
+    </select>
+
+    <insert id="create" keyProperty="id" keyColumn="id" useGeneratedKeys="true">
+        INSERT INTO tasklist.users (name, username, password)
+        VALUES (#{user.name}, #{user.username}, #{user.password})
+    </insert>
+
+    <insert id="insertUserRole">
+        INSERT INTO tasklist.users_roles (user_id, role)
+        VALUES (#{userId}, #{role})
+    </insert>
+
+    <update id="update">
+        UPDATE tasklist.users
+        SET name = #{user.name},
+        username = #{user.username},
+        password = #{user.password}
+        WHERE id = #{user.id}
+    </update>
+
+    <select id="isTaskOwner" resultType="boolean">
+        SELECT EXISTS (SELECT 1
+        FROM tasklist.users_tasks
+        WHERE user_id = #{userId}
+        AND task_id = #{taskId})
+    </select>
+
+    <delete id="delete">
+        DELETE FROM tasklist.users
+        WHERE id = #{id}
+    </delete>
+</mapper>

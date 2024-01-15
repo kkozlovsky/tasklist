@@ -1,21 +1,25 @@
 package ru.kerporation.tasklist.repository;
 
+import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 import ru.kerporation.tasklist.domain.task.Task;
 
 import java.util.List;
 import java.util.Optional;
 
+@Mapper
 public interface TaskRepository {
 
-    Optional<Task> findById(final Long id);
+    Optional<Task> findById(@Param("id") final Long id);
 
-    List<Task> findAllByUserId(final Long userId);
+    List<Task> findAllByUserId(@Param("userId") final Long userId);
 
-    void assignToUserById(final Long taskId, final Long userId);
+    void assignToUserById(@Param("taskId") final Long taskId,
+                          @Param("userId") final Long userId);
 
-    void create(final Task task);
+    void create(@Param("task") final Task task);
 
-    void update(final Task task);
+    void update(@Param("task") final Task task);
 
-    void delete(final Long id);
+    void delete(@Param("id") final Long id);
 }

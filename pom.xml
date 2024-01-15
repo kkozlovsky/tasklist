@@ -21,6 +21,7 @@
         <hibernate-validator.version>8.0.1.Final</hibernate-validator.version>
         <jakarta-validation.version>3.0.2</jakarta-validation.version>
         <jjwt.version>0.12.3</jjwt.version>
+        <mybatis.version>3.0.3</mybatis.version>
     </properties>
 
     <dependencies>
@@ -43,6 +44,12 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-configuration-processor</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.mybatis.spring.boot</groupId>
+            <artifactId>mybatis-spring-boot-starter</artifactId>
+            <version>${mybatis.version}</version>
         </dependency>
 
         <dependency>
