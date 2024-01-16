@@ -1,5 +1,3 @@
-CREATE SCHEMA IF NOT EXISTS tasklist;
-
 CREATE TABLE IF NOT EXISTS tasklist.users
 (
     id       BIGSERIAL PRIMARY KEY,

@@ -4,13 +4,10 @@ spring:
     username: postgres
     password: postgres
     driver-class-name: org.postgresql.Driver
-  sql:
-    init:
-      mode: always
-      continue-on-error: false
-      platform: postgres
-      encoding: UTF-8
-#      data-locations: classpath:/sql/schema.sql, classpath:/sql/demo_data.sql
+  liquibase:
+    change-log: classpath:liquibase/db.changelog.yaml
+    enabled: true
+    default-schema: tasklist
 mybatis:
   mapper-locations: classpath:mybatis/mapper/*.xml
 security:
