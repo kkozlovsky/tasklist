@@ -3,6 +3,7 @@ package ru.kerporation.tasklist.web.controller;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import ru.kerporation.tasklist.domain.task.Task;
@@ -32,6 +33,7 @@ public class UserController {
     private final TaskMapper taskMapper;
 
     @GetMapping("/{id}")
+    @PreAuthorize("@customSecurityExpression.canAccessUser(#id)")
     @Operation(summary = "Get UserDto by id")
     public UserDto getById(@PathVariable final Long id) {
         final User user = userService.getById(id);
@@ -40,6 +42,7 @@ public class UserController {
 
     @PutMapping
     @Operation(summary = "Update user")
+    @PreAuthorize("@customSecurityExpression.canAccessUser(#userDto.id)")
     public UserDto update(@Validated(OnUpdate.class) @RequestBody final UserDto userDto) {
         final User user = userMapper.toEntity(userDto);
         final User updatedUser = userService.update(user);
@@ -48,12 +51,14 @@ public class UserController {
 
     @DeleteMapping("/{id}")
     @Operation(summary = "Delete user by id")
+    @PreAuthorize("@customSecurityExpression.canAccessUser(#id)")
     public void deleteById(@PathVariable final Long id) {
         userService.delete(id);
     }
 
     @GetMapping("/{id}/tasks")
     @Operation(summary = "Get all User tasks")
+    @PreAuthorize("@customSecurityExpression.canAccessUser(#id)")
     public List<TaskDto> getTasksByUserId(@PathVariable final Long id) {
         final List<Task> tasks = taskService.getAllByUserId(id);
         return taskMapper.toDto(tasks);
@@ -61,6 +66,7 @@ public class UserController {
 
     @PostMapping("/{id}/tasks")
     @Operation(summary = "Add task to user")
+    @PreAuthorize("@customSecurityExpression.canAccessUser(#id)")
     public TaskDto createTask(@PathVariable final Long id,
                               @Validated(OnCreate.class) @RequestBody final TaskDto taskDto) {
         final Task task = taskMapper.toEntity(taskDto);
