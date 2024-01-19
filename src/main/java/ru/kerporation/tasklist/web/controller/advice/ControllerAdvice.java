@@ -41,13 +41,15 @@ public class ControllerAdvice {
 
     @ExceptionHandler({AccessDeniedException.class, org.springframework.security.access.AccessDeniedException.class})
     @ResponseStatus(HttpStatus.FORBIDDEN)
-    public ExceptionBody handleAccessDenied() {
+    public ExceptionBody handleAccessDenied(final AccessDeniedException e) {
+        log.error(e.getMessage());
         return new ExceptionBody("Access denied.");
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ExceptionBody handleMethodArgumentNotValid(final MethodArgumentNotValidException e) {
+        log.error(e.getMessage());
         final ExceptionBody exceptionBody = new ExceptionBody("Validation failed.");
         final List<FieldError> errors = e.getBindingResult().getFieldErrors();
         exceptionBody.setErrors(errors.stream()
@@ -58,6 +60,7 @@ public class ControllerAdvice {
     @ExceptionHandler(ConstraintViolationException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ExceptionBody handleConstraintViolation(final ConstraintViolationException e) {
+        log.error(e.getMessage());
         final ExceptionBody exceptionBody = new ExceptionBody("Validation failed.");
         exceptionBody.setErrors(e.getConstraintViolations().stream()
                 .collect(Collectors.toMap(
@@ -70,13 +73,14 @@ public class ControllerAdvice {
     @ExceptionHandler(AuthenticationException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ExceptionBody handleAuthentication(final AuthenticationException e) {
+        log.error(e.getMessage());
         return new ExceptionBody("Authentication failed.");
     }
 
     @ExceptionHandler(Exception.class)
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     public ExceptionBody handleException(final Exception e) {
-        log.error(e.getMessage(), e);
+        log.error(e.getMessage());
         return new ExceptionBody("Internal error.");
     }
 }

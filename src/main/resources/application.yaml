@@ -1,18 +1,28 @@
 spring:
+  config:
+    import: optional:file:.env[.properties]
+  cache:
+    type: redis
+    cache-names: redis-cache
+  data:
+    redis:
+      host: ${REDIS_HOST}
+      port: ${REDIS_PORT}
+      password: ${REDIS_PASSWORD}
   datasource:
-    url: jdbc:postgresql://localhost:5432/tasklist?currentSchema=tasklist
-    username: postgres
-    password: postgres
+    url: jdbc:postgresql://${POSTGRES_HOST}:5432/${POSTGRES_DATABASE}?currentSchema=${POSTGRES_SCHEMA}
+    username: ${POSTGRES_USERNAME}
+    password: ${POSTGRES_PASSWORD}
     driver-class-name: org.postgresql.Driver
   liquibase:
     change-log: classpath:liquibase/db.changelog.yaml
     enabled: true
-    default-schema: tasklist
+    default-schema: ${POSTGRES_SCHEMA}
 mybatis:
   mapper-locations: classpath:mybatis/mapper/*.xml
 security:
   jwt:
-    secret: YXNkYXNkYXNkYWRhc2RzZ25MS1BMUEwnYXNkYXNkYWpzZmFhc2Fhc2Zhc2ZnYXM=
+    secret: ${JWT_SECRET}
     access: 3600000
     refresh: 2592000000
 springdoc:
