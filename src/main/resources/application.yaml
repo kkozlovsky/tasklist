@@ -18,8 +18,6 @@ spring:
     change-log: classpath:liquibase/db.changelog.yaml
     enabled: true
     default-schema: ${POSTGRES_SCHEMA}
-mybatis:
-  mapper-locations: classpath:mybatis/mapper/*.xml
 security:
   jwt:
     secret: ${JWT_SECRET}

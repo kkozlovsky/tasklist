@@ -13,7 +13,6 @@ import ru.kerporation.tasklist.repository.TaskRepository;
 import ru.kerporation.tasklist.service.TaskService;
 
 import java.util.List;
-import java.util.Objects;
 
 @Service
 @RequiredArgsConstructor
@@ -39,9 +38,11 @@ public class TaskServiceImpl implements TaskService {
     @Transactional
     @Cacheable(value = "TaskService::getById", condition = "#task.id!=null", key = "#task.id")
     public Task create(final Task task, final Long userId) {
-        task.setStatus(Status.TODO);
-        taskRepository.create(task);
-        taskRepository.assignToUserById(task.getId(), userId);
+        if (task.getStatus() != null) {
+            task.setStatus(Status.TODO);
+        }
+        taskRepository.save(task);
+        taskRepository.assignTask(userId, task.getId());
         return task;
     }
 
@@ -49,10 +50,16 @@ public class TaskServiceImpl implements TaskService {
     @Transactional
     @CachePut(value = "TaskService::getById", key = "#task.id")
     public Task update(final Task task) {
-        if (Objects.isNull(task.getStatus())) {
-            task.setStatus(Status.TODO);
+        final Task existing = getById(task.getId());
+        if (task.getStatus() == null) {
+            existing.setStatus(Status.TODO);
+        } else {
+            existing.setStatus(task.getStatus());
         }
-        taskRepository.update(task);
+        existing.setTitle(task.getTitle());
+        existing.setDescription(task.getDescription());
+        existing.setExpirationDate(task.getExpirationDate());
+        taskRepository.save(task);
         return task;
     }
 
@@ -60,6 +67,6 @@ public class TaskServiceImpl implements TaskService {
     @Transactional
     @CacheEvict(value = "TaskService ::getById", key = "#id")
     public void delete(final Long id) {
-        taskRepository.delete(id);
+        taskRepository.deleteById(id);
     }
 }

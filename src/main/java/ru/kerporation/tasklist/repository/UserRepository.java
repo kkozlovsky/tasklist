@@ -1,28 +1,23 @@
 package ru.kerporation.tasklist.repository;
 
-import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.annotations.Param;
-import ru.kerporation.tasklist.domain.user.Role;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import ru.kerporation.tasklist.domain.user.User;
 
 import java.util.Optional;
 
-@Mapper
-public interface UserRepository {
+public interface UserRepository extends JpaRepository<User, Long> {
 
-    Optional<User> findById(@Param("id") final Long id);
+    Optional<User> findByUsername(final String username);
 
-    Optional<User> findByUsername(@Param("username") final String username);
-
-    void update(@Param("user") final User user);
-
-    void create(@Param("user") final User user);
-
-    void insertUserRole(@Param("userId") final Long userId,
-                        @Param("role") final Role role);
-
+    @Query(value = """
+            SELECT EXISTS (SELECT 1
+                                   FROM tasklist.users_tasks
+                                   WHERE user_id = :userId
+                                     AND task_id = :taskId)
+            """, nativeQuery = true)
     boolean isTaskOwner(@Param("userId") final Long userId,
                         @Param("taskId") final Long taskId);
 
-    void delete(@Param("id") final Long id);
 }

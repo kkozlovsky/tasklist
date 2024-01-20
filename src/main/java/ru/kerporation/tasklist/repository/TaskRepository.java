@@ -1,25 +1,27 @@
 package ru.kerporation.tasklist.repository;
 
-import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.annotations.Param;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import ru.kerporation.tasklist.domain.task.Task;
 
 import java.util.List;
-import java.util.Optional;
 
-@Mapper
-public interface TaskRepository {
+public interface TaskRepository extends JpaRepository<Task, Long> {
 
-    Optional<Task> findById(@Param("id") final Long id);
-
+    @Query(value = """
+            SELECT * FROM tasks t
+            INNER JOIN users_tasks ut ON t.id = ut.task_id
+            WHERE ut.user_id = :userId
+            """, nativeQuery = true)
     List<Task> findAllByUserId(@Param("userId") final Long userId);
 
-    void assignToUserById(@Param("taskId") final Long taskId,
-                          @Param("userId") final Long userId);
+    @Modifying
+    @Query(value = """
+            INSERT INTO users_tasks (user_id, task_id)
+            VALUES (:userId, :taskId)
+            """, nativeQuery = true)
+    void assignTask(@Param("userId") Long userId, @Param("taskId") Long taskId);
 
-    void create(@Param("task") final Task task);
-
-    void update(@Param("task") final Task task);
-
-    void delete(@Param("id") final Long id);
 }

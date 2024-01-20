@@ -53,9 +53,8 @@ public class UserServiceImpl implements UserService {
             throw new IllegalStateException("Passwords do not match");
         }
         user.setPassword(passwordEncoder.encode(user.getPassword()));
-        userRepository.create(user);
-        userRepository.insertUserRole(user.getId(), Role.ROLE_USER);
         user.setRoles(Set.of(Role.ROLE_USER));
+        userRepository.save(user);
         return user;
     }
 
@@ -67,7 +66,7 @@ public class UserServiceImpl implements UserService {
     })
     public User update(final User user) {
         user.setPassword(passwordEncoder.encode(user.getPassword()));
-        userRepository.update(user);
+        userRepository.save(user);
         return user;
     }
 
@@ -82,6 +81,6 @@ public class UserServiceImpl implements UserService {
     @Transactional
     @CacheEvict(value = "UserService::getById", key = "#id")
     public void delete(final Long id) {
-        userRepository.delete(id);
+        userRepository.deleteById(id);
     }
 }
