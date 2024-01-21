@@ -44,7 +44,8 @@ public class CustomMethodSecurityExpressionRoot extends SecurityExpressionRoot i
         return userService.isTaskOwner(user.getId(), taskId);
     }
 
-    private boolean hasAnyRole(Authentication authentication, Role... roles) {
+    private boolean hasAnyRole(final Authentication authentication,
+                               final Role... roles) {
         for (Role role : roles) {
             final SimpleGrantedAuthority authority = new SimpleGrantedAuthority(role.name());
             if (authentication.getAuthorities().contains(authority)) {
