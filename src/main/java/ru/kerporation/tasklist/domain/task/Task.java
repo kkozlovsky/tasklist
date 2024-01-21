@@ -5,6 +5,7 @@ import lombok.Data;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 @Table(name = "tasks")
@@ -21,4 +22,9 @@ public class Task implements Serializable {
     private Status status;
 
     private LocalDateTime expirationDate;
+
+    @Column(name = "image")
+    @CollectionTable(name = "tasks_images")
+    @ElementCollection(fetch = FetchType.EAGER)
+    private List<String> images;
 }

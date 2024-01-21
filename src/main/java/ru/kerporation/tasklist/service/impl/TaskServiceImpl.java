@@ -9,7 +9,9 @@ import org.springframework.transaction.annotation.Transactional;
 import ru.kerporation.tasklist.domain.exception.ResourceNotFoundException;
 import ru.kerporation.tasklist.domain.task.Status;
 import ru.kerporation.tasklist.domain.task.Task;
+import ru.kerporation.tasklist.domain.task.TaskImage;
 import ru.kerporation.tasklist.repository.TaskRepository;
+import ru.kerporation.tasklist.service.ImageService;
 import ru.kerporation.tasklist.service.TaskService;
 
 import java.util.List;
@@ -19,6 +21,7 @@ import java.util.List;
 public class TaskServiceImpl implements TaskService {
 
     private final TaskRepository taskRepository;
+    private final ImageService imageService;
 
     @Override
     @Transactional(readOnly = true)
@@ -68,5 +71,13 @@ public class TaskServiceImpl implements TaskService {
     @CacheEvict(value = "TaskService ::getById", key = "#id")
     public void delete(final Long id) {
         taskRepository.deleteById(id);
+    }
+
+    @Override
+    @Transactional
+    @CacheEvict(value = "TaskService::getById", key = "#id")
+    public void uploadImage(final Long id, final TaskImage image) {
+        final String fileName = imageService.upload(image);
+        taskRepository.addImage(id, fileName);
     }
 }

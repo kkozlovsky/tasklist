@@ -22,6 +22,15 @@ public interface TaskRepository extends JpaRepository<Task, Long> {
             INSERT INTO users_tasks (user_id, task_id)
             VALUES (:userId, :taskId)
             """, nativeQuery = true)
-    void assignTask(@Param("userId") Long userId, @Param("taskId") Long taskId);
+    void assignTask(@Param("userId") final Long userId,
+                    @Param("taskId") final Long taskId);
+
+    @Modifying
+    @Query(value = """
+            INSERT INTO tasks_images (task_id, image)
+            VALUES (:id, :fileName)
+            """, nativeQuery = true)
+    void addImage(@Param("id") final Long id,
+                  @Param("fileName") final String fileName);
 
 }

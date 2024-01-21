@@ -5,8 +5,5 @@ import ru.kerporation.tasklist.domain.user.User;
 import ru.kerporation.tasklist.web.dto.user.UserDto;
 
 @Mapper(componentModel = "spring")
-public interface UserMapper {
-    UserDto toDto(final User user);
-
-    User toEntity(final UserDto dto);
+public interface UserMapper extends Mappable<User, UserDto> {
 }

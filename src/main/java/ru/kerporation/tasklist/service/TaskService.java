@@ -1,6 +1,7 @@
 package ru.kerporation.tasklist.service;
 
 import ru.kerporation.tasklist.domain.task.Task;
+import ru.kerporation.tasklist.domain.task.TaskImage;
 
 import java.util.List;
 
@@ -14,4 +15,6 @@ public interface TaskService {
     Task update(final Task task);
 
     void delete(final Long id);
+
+    void uploadImage(final Long id, final TaskImage image);
 }

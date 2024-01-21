@@ -9,10 +9,7 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
-import ru.kerporation.tasklist.domain.exception.AccessDeniedException;
-import ru.kerporation.tasklist.domain.exception.ExceptionBody;
-import ru.kerporation.tasklist.domain.exception.ResourceMappingException;
-import ru.kerporation.tasklist.domain.exception.ResourceNotFoundException;
+import ru.kerporation.tasklist.domain.exception.*;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -75,6 +72,13 @@ public class ControllerAdvice {
     public ExceptionBody handleAuthentication(final AuthenticationException e) {
         log.error(e.getMessage());
         return new ExceptionBody("Authentication failed.");
+    }
+
+    @ExceptionHandler(ImageUploadException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ExceptionBody handleImageUpload(final ImageUploadException e) {
+        log.error(e.getMessage());
+        return new ExceptionBody(e.getMessage());
     }
 
     @ExceptionHandler(Exception.class)
