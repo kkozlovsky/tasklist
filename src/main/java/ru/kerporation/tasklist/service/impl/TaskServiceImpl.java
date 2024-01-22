@@ -15,6 +15,7 @@ import ru.kerporation.tasklist.service.ImageService;
 import ru.kerporation.tasklist.service.TaskService;
 
 import java.util.List;
+import java.util.Objects;
 
 @Service
 @RequiredArgsConstructor
@@ -41,7 +42,7 @@ public class TaskServiceImpl implements TaskService {
     @Transactional
     @Cacheable(value = "TaskService::getById", condition = "#task.id!=null", key = "#task.id")
     public Task create(final Task task, final Long userId) {
-        if (task.getStatus() != null) {
+        if (Objects.isNull(task.getStatus())) {
             task.setStatus(Status.TODO);
         }
         taskRepository.save(task);
