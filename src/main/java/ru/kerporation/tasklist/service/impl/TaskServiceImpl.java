@@ -14,6 +14,9 @@ import ru.kerporation.tasklist.repository.TaskRepository;
 import ru.kerporation.tasklist.service.ImageService;
 import ru.kerporation.tasklist.service.TaskService;
 
+import java.sql.Timestamp;
+import java.time.Duration;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Objects;
 
@@ -80,5 +83,12 @@ public class TaskServiceImpl implements TaskService {
     public void uploadImage(final Long id, final TaskImage image) {
         final String fileName = imageService.upload(image);
         taskRepository.addImage(id, fileName);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<Task> getAllSoonTasks(final Duration duration) {
+        final LocalDateTime now = LocalDateTime.now();
+        return taskRepository.findAllSoonTasks(Timestamp.valueOf(now), Timestamp.valueOf(now.plus(duration)));
     }
 }

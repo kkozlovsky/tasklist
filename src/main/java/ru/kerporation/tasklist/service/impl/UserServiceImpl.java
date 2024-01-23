@@ -9,11 +9,14 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.kerporation.tasklist.domain.exception.ResourceNotFoundException;
+import ru.kerporation.tasklist.domain.mail.MailType;
 import ru.kerporation.tasklist.domain.user.Role;
 import ru.kerporation.tasklist.domain.user.User;
 import ru.kerporation.tasklist.repository.UserRepository;
+import ru.kerporation.tasklist.service.MailService;
 import ru.kerporation.tasklist.service.UserService;
 
+import java.util.Properties;
 import java.util.Set;
 
 @Service
@@ -22,6 +25,7 @@ public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
+    private final MailService mailService;
 
     @Override
     @Transactional(readOnly = true)
@@ -55,6 +59,7 @@ public class UserServiceImpl implements UserService {
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         user.setRoles(Set.of(Role.ROLE_USER));
         userRepository.save(user);
+        mailService.sendEmail(user, MailType.REGISTRATION, new Properties());
         return user;
     }
 
@@ -82,5 +87,13 @@ public class UserServiceImpl implements UserService {
     @CacheEvict(value = "UserService::getById", key = "#id")
     public void delete(final Long id) {
         userRepository.deleteById(id);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    @Cacheable(value = "UserService::getTaskAuthor", key = "#taskId")
+    public User getTaskAuthor(final Long taskId) {
+        return userRepository.findTaskAuthor(taskId)
+                .orElseThrow(() -> new ResourceNotFoundException("User not found."));
     }
 }
