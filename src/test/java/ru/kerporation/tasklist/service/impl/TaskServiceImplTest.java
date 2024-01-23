@@ -43,8 +43,7 @@ public class TaskServiceImplTest {
         final Long id = 1L;
         final Task task = new Task();
         task.setId(id);
-        Mockito.when(taskRepository.findById(id))
-                .thenReturn(Optional.of(task));
+        Mockito.when(taskRepository.findById(id)).thenReturn(Optional.of(task));
         final Task testTask = taskService.getById(id);
         Mockito.verify(taskRepository).findById(id);
         Assertions.assertEquals(task, testTask);
@@ -118,7 +117,7 @@ public class TaskServiceImplTest {
         final Long taskId = 1L;
         final Task task = new Task();
         Mockito.doAnswer(invocation -> {
-            Task savedTask = invocation.getArgument(0);
+            final Task savedTask = invocation.getArgument(0);
             savedTask.setId(taskId);
             return savedTask;
         }).when(taskRepository).save(task);
