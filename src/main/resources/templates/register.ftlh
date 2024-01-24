@@ -36,8 +36,8 @@
         <h1 style="text-align: center">Registration</h1>
         <p>Hello, ${name}!</p>
         <p>This is registration mail. You can log in and use task list app.</p>
-        <p>With best regards, <br> Ilya Lisov</p>
-        <a id="a" href="https://github.com/IlyaLisov/tasklist">Github</a>
+        <p>With best regards, <br> Kirill Kozlovsky</p>
+        <a id="a" href="https://github.com/kkozlovsky/tasklist">Github</a>
     </div>
 </div>
 </body>

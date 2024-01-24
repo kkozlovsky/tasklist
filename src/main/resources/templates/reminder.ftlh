@@ -53,8 +53,8 @@
             <hr>
         </div>
         <p>You can get more information about this task in the app.</p>
-        <p>With best regards, <br> Ilya Lisov</p>
-        <a id="a" href="https://github.com/IlyaLisov/tasklist">Github</a>
+        <p>With best regards, <br> Kirill Kozlovsky</p>
+        <a id="a" href="https://github.com/kkozlovsky/tasklist">Github</a>
     </div>
 </div>
 </body>

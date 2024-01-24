@@ -24,8 +24,7 @@ public class ReminderImpl implements Reminder {
     private final MailService mailService;
     private final Duration duration = Duration.ofHours(1);
 
-    //    @Scheduled(cron = "0 0 * * * *")
-    @Scheduled(cron = "0 * * * * *")
+    @Scheduled(cron = "0 0 * * * *")
     @Override
     public void remindForTask() {
         final List<Task> tasks = taskService.getAllSoonTasks(duration);
